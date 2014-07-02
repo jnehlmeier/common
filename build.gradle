@@ -1,0 +1,138 @@
+import static org.gradle.api.JavaVersion.VERSION_1_7
+// import org.ajoberstar.grgit.Grgit
+
+buildscript {
+  repositories {
+    maven {
+      url 'https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/'
+    }
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.4'
+    classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.9.0'
+    classpath 'net.ltgt.gradle:gradle-errorprone-plugin:latest.release'
+    //classpath 'org.ajoberstar:gradle-git:0.9.0'
+  }
+}
+
+// TODO(jnehlmeier) grgit-release disabled because it fails for multi module projects
+// https://github.com/ajoberstar/gradle-git/issues/58
+/*
+apply plugin: 'grgit-release'
+
+release {
+  grgit = Grgit.open(project.file('.'))
+  releaseTasks = ['clean', 'build'].collect { task ->
+    subprojects.collect { project ->
+      ":" + project.name + ":" + task
+    }.flatten()
+  }.flatten()
+}
+*/
+
+ext {
+  guavaVersion = '17.0'
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'errorprone'
+
+  apply plugin: 'license'
+  apply plugin: 'signing'
+  apply plugin: 'maven'
+
+  apply plugin: 'idea'
+  apply plugin: 'eclipse'
+
+  group = 'de.nehlmeier.common'
+  // TODO(jnehlmeier) remove version once grgit-release works
+  version = '1.0.0'
+
+  sourceCompatibility = VERSION_1_7
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      url "http://oss.sonatype.org/content/groups/google/"
+    }
+  }
+
+  license {
+    header rootProject.file('config/LICENSE-FILE-HEADER')
+    ext.year = Calendar.getInstance().get(Calendar.YEAR)
+  }
+
+  task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+  }
+
+  task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+  }
+
+  artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+  }
+
+  signing {
+    sign configurations.archives
+  }
+
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        beforeDeployment { signing.signPom(it) }
+
+        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+
+        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+
+        pom.project {
+          name "$project.group:$project.name"
+          description 'Common utilities used by my other projects'
+          packaging 'jar'
+          url "https://jnehlmeier.github.io/$rootProject.name"
+
+          scm {
+            connection "scm:git:https://github.com/jnehlmeier/$rootProject.name" + ".git"
+            developerConnection "scm:git:git@github.com:jnehlmeier/$rootProject.name" + ".git"
+            url "https://github.com/jnehlmeier/$rootProject.name"
+          }
+
+          licenses {
+            license {
+              name 'The Apache Software License, Version 2.0'
+              url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+              distribution 'repo'
+            }
+          }
+
+          developers {
+            developer {
+              id 'jnehlmeier'
+              name 'Jens Nehlmeier'
+              email 'jens@nehlmeier.de'
+              url 'http://nehlmeier.de'
+              roles {
+                role 'owner'
+                role 'developer'
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

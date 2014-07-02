@@ -1,0 +1,5 @@
+# NOTE: Rules for IDE and/or OS specific files should be
+# placed in your ~/.gitignore_global file
+
+.gradle/
+build/

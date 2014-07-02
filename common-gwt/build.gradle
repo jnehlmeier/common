@@ -1,0 +1,30 @@
+dependencies {
+  compile project(':common')
+  compile 'com.google.gwt:gwt-user:2.6.1'
+  compile "com.google.guava:guava-gwt:$guavaVersion"
+}
+
+jar {
+  // Include resources for GWT
+  from project.sourceSets.main.allSource
+  from project.sourceSets.main.output
+
+  // Include :common sources but exclude everything that is
+  // - not @GwtCompatible
+  // - has super-source emulation
+  from(project(':common').sourceSets.main.allJava) {
+    exclude { details ->
+      return !details.isDirectory() &&
+          (!details.file.text.contains("@GwtCompatible")
+              || details.file.text.contains("emulated = true"))
+    }
+  }
+}
+
+javadoc {
+  // Include JavaDoc from :common for all @GwtCompatible classes.
+  source project(":common").sourceSets.main.allJava.filter { file ->
+    file.text.contains "@GwtCompatible"
+  }
+  classpath = files(project(":common").sourceSets.main.compileClasspath)
+}
