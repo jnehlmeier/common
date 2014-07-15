@@ -19,4 +19,5 @@
         "http://google-web-toolkit.googlecode.com/svn/releases/2.5/distro-source/core/src/gwt-module.dtd">
 <module>
     <inherits name="de.nehlmeier.common.j8bp.J8bp" />
+    <inherits name="de.nehlmeier.common.util.Util" />
 </module>
