@@ -48,7 +48,7 @@ subprojects {
 
   group = 'de.nehlmeier.common'
   // TODO(jnehlmeier) remove version once grgit-release works
-  version = '1.0.0'
+  version = '1.0.1'
 
   sourceCompatibility = VERSION_1_7
 
