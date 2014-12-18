@@ -38,6 +38,10 @@ ext {
     guavaVersion = '18.0'
 }
 
+allprojects {
+    version = rootProject.version
+}
+
 subprojects {
     apply plugin: 'java'
 
