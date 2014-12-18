@@ -24,6 +24,10 @@ release {
     grgit = Grgit.open(project.file('.'))
     // add SNAPSHOT strategy for Maven / CI
     versionStrategy Strategies.SNAPSHOT
+
+    tagStrategy {
+        prefixNameWithV = false
+    }
 }
 
 // For a release we want a 'clean build' for each module.
