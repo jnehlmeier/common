@@ -28,7 +28,7 @@ release {
 
 // For a release we want a 'clean build' for each module.
 // Task ordering configured in subprojects { ... }
-tasks.release.dependsOn(['clean', 'build', 'uploadArchives', 'publishGhPages'].collect { task ->
+tasks.release.dependsOn(['clean', 'build', 'uploadArchives'].collect { task ->
     subprojects.collect { project ->
         ":" + project.name + ":" + task
     }.flatten()
@@ -60,8 +60,6 @@ subprojects {
     apply plugin: 'license'
     apply plugin: 'com.bmuschko.nexus'
 
-    apply plugin: 'org.ajoberstar.github-pages'
-
     group = 'de.nehlmeier.common'
     sourceCompatibility = VERSION_1_7
     project.tasks.build.mustRunAfter ":$project.name:clean"
@@ -71,15 +69,6 @@ subprojects {
         mavenCentral()
         maven {
             url "http://oss.sonatype.org/content/groups/google/"
-        }
-    }
-
-    githubPages {
-        repoUri = 'https://github.com/jnehlmeier/common'
-        commitMessage "Upload JavaDoc: $project.name/$project.version"
-        pages {
-            from javadoc.outputs.files
-            into "docs/$project.name/$project.version"
         }
     }
 
