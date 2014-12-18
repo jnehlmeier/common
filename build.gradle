@@ -28,7 +28,7 @@ release {
 
 // For a release we want a 'clean build' for each module.
 // Task ordering configured in subprojects { ... }
-tasks.release.dependsOn(['clean', 'build'].collect { task ->
+tasks.release.dependsOn(['clean', 'build', 'uploadArchives', 'publishGhPages'].collect { task ->
     subprojects.collect { project ->
         ":" + project.name + ":" + task
     }.flatten()
@@ -81,7 +81,7 @@ subprojects {
     }
 
     license {
-        header rootProject.file('config/LICENSE-FILE-HEADER')
+        header rootProject.file('gradle/LICENSE-FILE-HEADER')
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
     }
 
