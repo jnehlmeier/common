@@ -38,8 +38,11 @@ ext {
     guavaVersion = '18.0'
 }
 
-allprojects {
-    version = rootProject.version
+subprojects {
+    // FIXME: NexusPlugin assumes String version but Release plugin uses custom class
+    // Change back to 'allprojects { version = rootProject.version }'
+    // once NexusPlugin provides fix
+    version = rootProject.version.toString()
 }
 
 subprojects {
