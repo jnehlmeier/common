@@ -65,7 +65,7 @@ public final class Flag {
   /**
    * Checks if this flag is true.
    *
-   * @return <code>true</code> if this flag is true
+   * @return {@code true} if this flag is true
    */
   public boolean isTrue() {
     return state;
@@ -74,7 +74,7 @@ public final class Flag {
   /**
    * Checks if this flag is false.
    *
-   * @return <code>true</code> if this flag is false
+   * @return {@code true} if this flag is false
    */
   public boolean isFalse() {
     return !state;

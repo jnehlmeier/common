@@ -51,10 +51,10 @@ public final class Counter {
   }
 
   /**
-   * Increases this counter using the provided <code>amount</code>
+   * Increases this counter using the provided {@code amount}
    *
    * @param amount the amount argument
-   * @throws java.lang.IllegalArgumentException if amount < 1
+   * @throws java.lang.IllegalArgumentException if {@code amount < 1}
    */
   public void inc(int amount) {
     checkArgument(amount >= 1, "amount should be >= 1");
@@ -69,10 +69,10 @@ public final class Counter {
   }
 
   /**
-   * Decreases this counter using the provided <code>amount</code>
+   * Decreases this counter using the provided {@code amount}
    *
    * @param amount the amount argument
-   * @throws java.lang.IllegalArgumentException if amount < 1
+   * @throws java.lang.IllegalArgumentException if {@code amount < 1}
    */
   public void dec(int amount) {
     checkArgument(amount >= 1, "amount should be >= 1");
@@ -91,7 +91,7 @@ public final class Counter {
   /**
    * Checks if this counter is zero.
    *
-   * @return <code>true</code> if the counter is zero
+   * @return {@code true} if the counter is zero
    */
   public boolean isZero() {
     return counter == 0;
